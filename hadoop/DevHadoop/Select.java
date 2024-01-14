@@ -19,7 +19,8 @@ public class Select {
             System.exit(-1);
         }
         System.out.println("Selectionner la l'operateur de l'algebre relationelle ");
-        System.out.println("1) Select * from Employees ");
+        System.out.println("1) Select distinct * from Employees ");
+        System.out.println("2) Select distinct * from Employees where type_salaire='Hourly' and prix_heure>55 ");
         System.out.print(">> ");
         try {
             oper=new Scanner(System.in).nextInt();
@@ -42,6 +43,8 @@ public class Select {
                 job.setReducerClass(SelectReducer.class);// definir la classe qui réalise le reduce
                 break;
             case 2:
+                job.setMapperClass(SelectMapper.class);// définir la classe qui réalise le map
+                job.setReducerClass(SelectWhereReducer.class);// definir la classe qui réalise le reduce
                 break;
         }
 
