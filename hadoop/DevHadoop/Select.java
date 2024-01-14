@@ -22,6 +22,7 @@ public class Select {
         System.out.println("1) Select distinct * from Employees ");
         System.out.println("2) Select distinct * from Employees where type_salaire='Hourly' and prix_heure>55 ");
         System.out.println("3) (Select distinct * from Employees) UNION (Select distinct * from Employees1) ");
+        System.out.println("4) (Select distinct * from Employees) INTERSECTION (Select distinct * from Employees1) ");
         System.out.print(">> ");
         try {
             oper=new Scanner(System.in).nextInt();
@@ -50,6 +51,10 @@ public class Select {
             case 3:
                 job.setMapperClass(SelectMapper.class);// définir la classe qui réalise le map
                 job.setReducerClass(SelectUnionReducer.class);// definir la classe qui réalise le reduce
+                break;
+            case 4:
+                job.setMapperClass(SelectMapper.class);// définir la classe qui réalise le map
+                job.setReducerClass(SelectIntersectReducer.class);// definir la classe qui réalise le reduce
                 break;
         }
 
