@@ -33,19 +33,24 @@ public class Select {
         Configuration conf = new Configuration();
         Job job = Job.getInstance(conf, "select_inst");
 
+        // definir le format de la sortie
+        job.setOutputKeyClass(LongWritable.class);
+        job.setOutputValueClass(Text.class);
+
         job.setJarByClass(Select.class);
         job.setJobName("select");
 
         // on connecte les entrée et sorties sur les répertoires passés en paramètre
         FileInputFormat.addInputPath(job, new Path(args[0]));
         FileOutputFormat.setOutputPath(job, new Path(args[1]));
+
         switch (oper){
             case 1:
                 job.setMapperClass(SelectMapper.class);// définir la classe qui réalise le map
                 job.setReducerClass(SelectReducer.class);// definir la classe qui réalise le reduce
                 break;
             case 2:
-                job.setMapperClass(SelectMapper.class);// définir la classe qui réalise le map
+                job.setMapperClass(SelectWhereMapper.class);// définir la classe qui réalise le map
                 job.setReducerClass(SelectWhereReducer.class);// definir la classe qui réalise le reduce
                 break;
             case 3:
@@ -61,11 +66,6 @@ public class Select {
                 job.setReducerClass(SelectJoinReducer.class);// definir la classe qui réalise le reduce
                 break;
         }
-
-
-        // definir le format de la sortie
-        job.setOutputKeyClass(LongWritable.class);
-        job.setOutputValueClass(Text.class);
 
         // lancer l'exec
         long start = System.currentTimeMillis();
