@@ -27,7 +27,7 @@ public class SelectJoinReducer extends Reducer<LongWritable, Text,LongWritable, 
                     user.add(userval + "," + lieuval);
                     String[] attrib = (userval + "," + lieuval).split(",");
                     if (attrib[3].equals(attrib[9])) {
-                        String newVal=joinString(attrib,3,10,8);
+                        String newVal=joinString(attrib,3,10,9);
                         context.write(count, new Text(newVal));
                         count.set(count.get() + 1);
                     }
@@ -37,12 +37,13 @@ public class SelectJoinReducer extends Reducer<LongWritable, Text,LongWritable, 
     }
     public String joinString(String[] a,int i1,int i2,int limit){
         StringBuilder msg= new StringBuilder();
-        for (int i = 0; i < limit; i++) {
+        for (int i = 0; i < limit-1; i++) {
             if (i!=i1)
                 msg.append(a[i]).append(",");
             else
                 msg.append(a[i2]).append(",");
         }
+        msg.append(a[limit-1]);
         return msg.toString();
     }
 }
