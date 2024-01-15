@@ -23,6 +23,7 @@ public class Select {
         System.out.println("2) Select distinct * from Employees where type_salaire='Hourly' and prix_heure>55 ");
         System.out.println("3) (Select distinct * from Employees) UNION (Select distinct * from Employees1) ");
         System.out.println("4) (Select distinct * from Employees) INTERSECTION (Select distinct * from Employees1) ");
+        System.out.println("5) (Select distinct * from Employees,Lieu_Travail where Employe.idtravail=Lieu_Travail.id");
         System.out.print(">> ");
         try {
             oper=new Scanner(System.in).nextInt();
@@ -38,7 +39,6 @@ public class Select {
         // on connecte les entrée et sorties sur les répertoires passés en paramètre
         FileInputFormat.addInputPath(job, new Path(args[0]));
         FileOutputFormat.setOutputPath(job, new Path(args[1]));
-
         switch (oper){
             case 1:
                 job.setMapperClass(SelectMapper.class);// définir la classe qui réalise le map
@@ -56,6 +56,10 @@ public class Select {
                 job.setMapperClass(SelectMapper.class);// définir la classe qui réalise le map
                 job.setReducerClass(SelectIntersectReducer.class);// definir la classe qui réalise le reduce
                 break;
+            case 5:
+                job.setMapperClass(SelectMapper.class);// définir la classe qui réalise le map
+                job.setReducerClass(SelectJoinReducer.class);// definir la classe qui réalise le reduce
+                break;
         }
 
 
@@ -64,6 +68,9 @@ public class Select {
         job.setOutputValueClass(Text.class);
 
         // lancer l'exec
+        long start = System.currentTimeMillis();
         System.exit(job.waitForCompletion(true) ? 0 : 1);
+        long finish = System.currentTimeMillis();
+        System.out.println("Temps d'exection ( "+(finish - start)+" ms)");
     }
 }
